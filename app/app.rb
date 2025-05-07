@@ -13,7 +13,7 @@ get "/track" do
   
 end
 
-post "/track:rel" do
+post "/track/:rel" do
   
 end
 
