@@ -1,0 +1,10 @@
+/Dockerfile
+/.env
+
+app/tracks/*
+
+.git/
+
+*.db
+*.sqlite3
+*.log
