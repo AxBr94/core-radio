@@ -1,12 +1,5 @@
 require "sinatra"
 require "json"
-#require "dotenv"
-#Dotenv.load
-
-# configure do
-#   set :db_user, ENV["DB_USER"]
-#   set :db_password, ENV["DB_PASSWORD"]
-# end
 
 set(:bind, "127.0.0.1")
 set(:port, 3000)
