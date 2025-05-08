@@ -9,12 +9,9 @@ get "/" do
   erb :index
 end
 
-get "/track" do
-  
-end
-
-post "/track/:rel" do
-  
+#extracting files
+get "/track/:rel" do
+  status 202
 end
 
 #All URLs except the rooth path will be redirected to 404 page
