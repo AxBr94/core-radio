@@ -2,7 +2,7 @@ Thread.abort_on_exception = true
 
 #File-manager class
 class TrackManager
-  BASE_PATH = "../tracks/"
+  BASE_PATH = "tracks/"
 
   def initialize(playlist = "hardcore")
     @playlist = playlist
