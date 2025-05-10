@@ -3,14 +3,15 @@ body {
     background-color: black;
 
     main {
-        margin: -18px auto auto auto;
+        margin: auto;
         width: 40%;
         height: 100vh;
         background-color: #515151;
 
         .image-container {
-            /*margin-top: 100px;*/
+            margin: auto;
             width: 80%;
+            height: auto;
 
             .vidget {
                 height: auto;
@@ -18,10 +19,29 @@ body {
             }
         }
 
-        .form {
+        .track-name-output {
+            display: block;
+            width: 80%;
+            text-align: center;
+            margin: 100px auto 100px auto;
+            color: black;
+            font-size: 2rem;
+        }
+
+        .buttons-container {
+            height: auto;
             width: 100%;
             display: flex;
-            flex-flow: column wrap;
+            flex-flow: row nowrap;
+            justify-content: space-evenly;
+        }
+
+        .buttons {
+            padding: 20px;
+            width: 30%;
+            color: white;
+            background-color: black;
+            font-size: 2rem;
         }
     }
 }
