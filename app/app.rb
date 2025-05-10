@@ -25,7 +25,7 @@ get "/track" do
     when track_list[сurrent_track].end_with?(".flac") then "audio/ogg"
     when track_list[сurrent_track].end_with?(".wav") then "audio/wav"
   end
-  #send_file $track_manager.get_tracks[0], disposition: "inline"
+  send_file track_list[сurrent_track], disposition: "inline"
 end
 
 #All URLs except the rooth path will be redirected to 404 page
