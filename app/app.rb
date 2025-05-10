@@ -20,12 +20,12 @@ get "/track" do
     erb :"#{403}"
   else
     status 200
-    track_manager = TrackManager.new("hardcore")
+    track_manager = TrackManager.new(params[:playlist])
     track_list = track_manager.get_tracks
     сurrent_track = 0
 
     #puts params[:playlist]
-    content_type = case
+    content_type case
       when track_list[сurrent_track].end_with?(".mp3") then "audio/mpeg"
       when track_list[сurrent_track].end_with?(".flac") then "audio/ogg"
       when track_list[сurrent_track].end_with?(".wav") then "audio/wav"
