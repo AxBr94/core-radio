@@ -1,6 +1,6 @@
 require "sinatra"
 require "date"
-require_relative "lib/track_manager"
+require_relative "lib/track_manager.rb"
 
 set(:bind, "127.0.0.1")
 set(:port, 3000)
@@ -13,9 +13,19 @@ get "/" do
 end
 
 #extracting files
-get "/track/:playlist" do
+get "/track" do
   status 200
-  puts params[:rel]
+  track_manager = TrackManager.new("hardcore")
+  track_list = track_manager.get_tracks
+  сurrent_track = 0
+
+  #puts params[:playlist]
+  content_type = case
+    when track_list[сurrent_track].end_with?(".mp3") then "audio/mpeg"
+    when track_list[сurrent_track].end_with?(".flac") then "audio/ogg"
+    when track_list[сurrent_track].end_with?(".wav") then "audio/wav"
+  end
+  #send_file $track_manager.get_tracks[0], disposition: "inline"
 end
 
 #All URLs except the rooth path will be redirected to 404 page
