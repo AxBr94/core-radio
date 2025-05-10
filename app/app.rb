@@ -14,18 +14,24 @@ end
 
 #extracting files
 get "/track" do
-  status 200
-  track_manager = TrackManager.new("hardcore")
-  track_list = track_manager.get_tracks
-  сurrent_track = 0
+  #if getting request from browser (not ajax) then 404.
+  unless request.xhr?
+    status 403
+    erb :"#{403}"
+  else
+    status 200
+    track_manager = TrackManager.new("hardcore")
+    track_list = track_manager.get_tracks
+    сurrent_track = 0
 
-  #puts params[:playlist]
-  content_type = case
-    when track_list[сurrent_track].end_with?(".mp3") then "audio/mpeg"
-    when track_list[сurrent_track].end_with?(".flac") then "audio/ogg"
-    when track_list[сurrent_track].end_with?(".wav") then "audio/wav"
-  end
-  send_file track_list[сurrent_track], disposition: "inline"
+    #puts params[:playlist]
+    content_type = case
+      when track_list[сurrent_track].end_with?(".mp3") then "audio/mpeg"
+      when track_list[сurrent_track].end_with?(".flac") then "audio/ogg"
+      when track_list[сurrent_track].end_with?(".wav") then "audio/wav"
+    end
+    send_file track_list[сurrent_track], disposition: "inline"
+  end  
 end
 
 #All URLs except the rooth path will be redirected to 404 page
