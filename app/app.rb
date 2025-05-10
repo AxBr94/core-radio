@@ -1,5 +1,5 @@
 require "sinatra"
-require "json"
+require "date"
 require_relative "lib/track_manager"
 
 set(:bind, "127.0.0.1")
@@ -7,6 +7,8 @@ set(:port, 3000)
 
 get "/" do
   status 200
+  date = Time.new
+  @date = "#{date.day}-#{date.month}-#{date.year}"
   erb :index
 end
 
