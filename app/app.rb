@@ -14,7 +14,7 @@ end
 
 #extracting files
 get "/track" do
-  #if getting request from browser (not ajax) then 404.
+  #if getting request from browser (not ajax) then 403.
   unless request.xhr?
     status 403
     erb :"#{403}"
@@ -23,8 +23,6 @@ get "/track" do
     track_manager = TrackManager.new(params[:playlist])
     track_list = track_manager.get_tracks
     сurrent_track = 0
-
-    #puts params[:playlist]
     content_type case
       when track_list[сurrent_track].end_with?(".mp3") then "audio/mpeg"
       when track_list[сurrent_track].end_with?(".flac") then "audio/ogg"

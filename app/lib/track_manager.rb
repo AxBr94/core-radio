@@ -11,6 +11,7 @@ class TrackManager
   def get_tracks
     begin
       Dir.glob("#{BASE_PATH}#{@playlist}/*").each do |track|
+        puts @tracks
         @tracks.push track
       end
       @tracks.shuffle

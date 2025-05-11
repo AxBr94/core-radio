@@ -1,7 +1,10 @@
 'use strict';
 
-const trackRequest = () => {
-    fetch(`http://127.0.0.1:3000/track?playlist=hardcore`, {
+const audio = document.querySelector('#audio-tag');
+const playlists = document.querySelector('#playlists');
+
+const trackRequest = (playlist) => {
+    fetch(`http://127.0.0.1:3000/track?playlist=${playlist}`, {
         headers: {
           'X-Requested-With': 'XMLHttpRequest'
         }
@@ -14,9 +17,7 @@ const trackRequest = () => {
         })
         .then(blob => {
             const audioUrl = URL.createObjectURL(blob);
-            const audio = document.querySelector('#audio-tag');
             audio.setAttribute('src', `${audioUrl}`);
-            console.log(blob.type);
             if (blob.type === 'audio/mpeg') {
                 audio.setAttribute('type', 'audio/mpeg');
             } else if (blob.type === 'audio/ogg') {
@@ -29,4 +30,8 @@ const trackRequest = () => {
         .catch(err => console.error('Fetch error:', err));
 }
 
-window.onload = trackRequest();
+window.onload = trackRequest(playlists.value);
+
+playlists.addEventListener('change', () => {
+    trackRequest(playlists.value);
+});
