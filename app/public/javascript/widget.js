@@ -1,7 +1,12 @@
 'use strict';
 
-const path = 'gifs/';
-const gifs = ['bb.gif', 'dude.gif', 'emoes.gif'];
+class Widget {
+    constructor() {
+        this.imgTag = document.querySelector('#widget');
+        this.gifs = ['bb.gif', 'dude.gif', 'emoes.gif'];
+    }
+}
+Widget.path = 'gifs/';
 
-const widget = document.querySelector('#vidget');
-widget.setAttribute('src', `${path}${gifs[(Math.random()*2).toFixed(0)]}`);
+const widget = new Widget;
+widget.imgTag.setAttribute('src', `${Widget.path}${widget.gifs[(Math.random()*2).toFixed(0)]}`);
