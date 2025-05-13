@@ -14,8 +14,8 @@ class TrackLoader {
         }
     }
     
-    trackRequest(playlist) {
-        fetch(`http://127.0.0.1:3000/track?playlist=${playlist}`, {
+    trackRequest(playlist, rel="next") {
+        fetch(`http://127.0.0.1:3000/track?playlist=${playlist}&rel=${rel}`, {
             headers: {
               'X-Requested-With': 'XMLHttpRequest'
             }
@@ -49,4 +49,10 @@ window.onload = () => {
         trackLoader.trackRequest(trackLoader.playlists.value);
     });
     trackLoader.trackRequest(document.querySelector('#playlists').value);//!
+
+    setInterval(()=>{
+		if (trackLoader.audio.ended) {
+            trackLoader.trackRequest(trackLoader.playlists.value, "next");
+		}
+	}, 900);
 }

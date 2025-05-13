@@ -20,15 +20,19 @@ get "/track" do
     erb :"#{403}"
   else
     status 200
+
     track_manager = TrackManager.new(params[:playlist])
     track_list = track_manager.get_tracks
-    сurrent_track = 0
+    track_index = track_manager.change_audio_track(params[:rel])
+
+    puts "track_list: #{track_list}, track_number: #{track_index}"
+
     content_type case
-      when track_list[сurrent_track].end_with?(".mp3") then "audio/mpeg"
-      when track_list[сurrent_track].end_with?(".flac") then "audio/ogg"
-      when track_list[сurrent_track].end_with?(".wav") then "audio/wav"
+      when track_list[ track_index ].end_with?(".mp3") then "audio/mpeg"
+      when track_list[ track_index ].end_with?(".flac") then "audio/ogg"
+      when track_list[ track_index ].end_with?(".wav") then "audio/wav"
     end
-    send_file track_list[сurrent_track], disposition: "inline"
+    send_file track_list[ track_index ], disposition: "inline"
   end  
 end
 
