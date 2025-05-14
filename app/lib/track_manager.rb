@@ -5,7 +5,7 @@ class TrackManager
 
   def initialize(playlist)
     @playlist = playlist
-    @tracks = []
+    @tracks = Array.new(dir_counter)# do |pair|
   end
 
   #return file names
@@ -30,6 +30,13 @@ class TrackManager
     elsif position == "prev" and (@tracks[ @@current_track ] == @tracks.first)
       @@current_track = @tracks.length - 1
     end
+  end
+
+  private
+
+  def dir_counter
+    count = Dir.children(BASE_PATH).count { |folder|  File.directory? folder }
+    count
   end
 end
 

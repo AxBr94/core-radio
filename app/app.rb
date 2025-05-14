@@ -24,9 +24,7 @@ get "/track" do
     track_manager = TrackManager.new(params[:playlist])
     track_list = track_manager.get_tracks
     track_index = track_manager.change_audio_track(params[:rel])
-
-    puts "track_list: #{track_list}, track_number: #{track_index}"
-
+    
     content_type case
       when track_list[ track_index ].end_with?(".mp3") then "audio/mpeg"
       when track_list[ track_index ].end_with?(".flac") then "audio/ogg"
