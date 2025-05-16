@@ -1,42 +1,57 @@
-#File-manager class
+#Track controller class
 class TrackManager
   BASE_PATH = "tracks/"
-  @@current_track = 0
+  @@genres = [ "hardcore", "crust", "crossover" ]
 
-  def initialize(playlist)
-    @playlist = playlist
-    @tracks = Array.new(dir_counter)# do |pair|
-  end
+  attr_reader :tracklist_data
 
-  #return file names
-  def get_tracks
-    begin
-      Dir.glob("#{BASE_PATH}#{@playlist}/*").each do |track|
-        @tracks.push track
-      end
-      @tracks.shuffle
-    rescue => error
-      puts error.message
+  def initialize
+    #key-value data included an array of files and index of current track
+    @tracklist_data = Array.new(@@genres.length) do |i|
+      {
+        name: @@genres[i],
+        tracks: Dir.glob("#{BASE_PATH}#{@@genres[i]}/*").shuffle!,
+        current_track: 0
+      }
     end
   end
 
-  def change_audio_track(position)
-    if position == "next" and (@tracks[ @@current_track ] != @tracks.last)
-      @@current_track += 1
-    elsif position == "next" and (@tracks[ @@current_track ] == @tracks.last)
-      @@current_track = 0
-    elsif position == "prev" and (@tracks[ @@current_track ] != @tracks.first)
-      @@current_track -= 1
-    elsif position == "prev" and (@tracks[ @@current_track ] == @tracks.first)
-      @@current_track = @tracks.length - 1
+  #track switchers
+  def first_track(playlist_name)
+    tracklist = find_data(playlist_name) 
+    tracklist[:current_track] = 0
+    tracklist[:tracks][tracklist[:current_track]]
+  end
+
+  def next_track(playlist_name)
+    tracklist = find_data(playlist_name) 
+    unless tracklist[:current_track] == tracklist[:tracks].length-1
+      tracklist[:current_track] += 1
+      tracklist[:tracks][tracklist[:current_track]]
+    else
+      first_track(playlist_name)
+    end
+  end
+
+  def prev_track(playlist_name)
+    tracklist = find_data(playlist_name) 
+    unless tracklist[:current_track] == tracklist[:tracks].first
+      tracklist[:current_track] -= 1
+      tracklist[:tracks][tracklist[:current_track]]
+    else
+      tracklist[:current_track] = tracklist[:tracks].length-1
+      tracklist[:tracks].last
     end
   end
 
   private
 
-  def dir_counter
-    count = Dir.children(BASE_PATH).count { |folder|  File.directory? folder }
-    count
+  def find_data(playlist_name)
+    tracklist = @tracklist_data.find do |data|
+      data[:name] == playlist_name
+    end
+    tracklist
   end
 end
 
+TRACK_MANAGER = TrackManager.new
