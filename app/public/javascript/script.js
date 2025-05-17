@@ -1,9 +1,10 @@
 'use strict';
 
 class TrackLoader {
-    constructor(audioTagSelector, playlistsTagSelector) {
+    constructor(audioTagSelector, playlistsTagSelector, outputTagSelector) {
         this.audio = audioTagSelector;
         this.playlists = playlistsTagSelector;
+        this.output = outputTagSelector;
         this.audioUrl;
 
     }
@@ -24,6 +25,11 @@ class TrackLoader {
             if (!response.ok) {
                 throw new Error('Audio load error.');
             }
+            let trackName = response.headers.get('Content-Disposition')
+                .replace('inline; filename=', '')
+                .replace(/^"[\d{1,}]\./, '')
+                .replace(/(.flac)|(.mp3)|(.wav)"$/, '');
+            this.output.textContent = trackName;
             return response.blob();
         })
         .then(blob => {
@@ -37,21 +43,30 @@ class TrackLoader {
                 this.audio.setAttribute('type', 'audio/wav');
             }
             this.audio.play();
+            (() =>{
+                if(this.audio.paused) {
+                    alert(
+                        'Your browser blocks autoplay. Turn it on in the panel before the site URL'
+                    );
+                }
+            })();
         })
         .catch(err => console.error('Fetch error:', err));
+
     }
 }
 
 window.onload = () => {
     const trackLoader = new TrackLoader(
         document.querySelector('#audio-tag'),
-        document.querySelector('#playlists')
+        document.querySelector('#playlists'),
+        document.querySelector('#track-name-output')
     );
 
     trackLoader.playlists.addEventListener('change', () => {
         trackLoader.trackRequest(trackLoader.playlists.value);
     });
-    
+
     trackLoader.trackRequest(trackLoader.playlists.value);//!
 
     setInterval(()=>{

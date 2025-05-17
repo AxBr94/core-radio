@@ -31,11 +31,9 @@ get "/playlist/:playlist/direction/:direction" do
       track = TRACK_MANAGER.first_track(playlist)
     end
 
-    puts ":::::::::::#{TRACK_MANAGER.tracklist_data}::::::::::::::"
-
     content_type TYPER.return_type(track)
 
-    send_file track, disposition: "inline"
+    send_file track, filename: "#{File.basename track}", disposition: "inline"
   end
 end
 
