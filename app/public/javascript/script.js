@@ -6,6 +6,10 @@ class TrackLoader {
         this.playlists = playlistsTagSelector;
         this.output = outputTagSelector;
         this.audioUrl;
+        this.switchers = {
+            prev: document.querySelector('#prev-track'),
+            next: document.querySelector('#next-track'),
+        };
 
     }
 
@@ -27,8 +31,8 @@ class TrackLoader {
             }
             let trackName = response.headers.get('Content-Disposition')
                 .replace('inline; filename=', '')
-                .replace(/^"[\d{1,}]\./, '')
-                .replace(/(.flac)|(.mp3)|(.wav)"$/, '');
+                .replace(/["_]/g, ' ')
+                .replace(/(.flac)|(.mp3)|(.wav)$/, '');
             this.output.textContent = trackName;
             return response.blob();
         })
@@ -46,7 +50,7 @@ class TrackLoader {
             (() =>{
                 if(this.audio.paused) {
                     alert(
-                        'Your browser blocks autoplay. Turn it on in the panel before the site URL'
+                        'Your browser blocks autoplay. Turn it on in the panel before the site URL and reload the page'
                     );
                 }
             })();
@@ -60,15 +64,27 @@ window.onload = () => {
     const trackLoader = new TrackLoader(
         document.querySelector('#audio-tag'),
         document.querySelector('#playlists'),
-        document.querySelector('#track-name-output')
+        document.querySelector('#track-name-output'),
     );
 
+    //event on changing playlist
     trackLoader.playlists.addEventListener('change', () => {
         trackLoader.trackRequest(trackLoader.playlists.value);
     });
 
+    //control buttons events
+    trackLoader.switchers.prev.addEventListener('click', () => {
+        trackLoader.trackRequest(trackLoader.playlists.value, "prev");
+    });
+
+    trackLoader.switchers.next.addEventListener('click', () => {
+        trackLoader.trackRequest(trackLoader.playlists.value, "next");
+    });
+    
+    //first track
     trackLoader.trackRequest(trackLoader.playlists.value);//!
 
+    //autoplay next tracks
     setInterval(()=>{
 		if (trackLoader.audio.ended) {
             trackLoader.trackRequest(trackLoader.playlists.value, "next");
