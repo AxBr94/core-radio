@@ -37,6 +37,12 @@ get "/playlist/:playlist/direction/:direction" do
   end
 end
 
+get "/chat" do
+  status 200
+
+  erb :chat
+end
+
 #All URLs except the rooth path will be redirected to 404 page
 # get %r{.*} do
 #   status 404
