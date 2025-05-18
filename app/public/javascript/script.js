@@ -14,6 +14,10 @@ class TrackLoader {
     }
 
     setAudioUrl(blob) {
+        //checkig existing of old blobs in browser
+        if (this.audioUrl) {
+            URL.revokeObjectURL(this.audioUrl);
+        }
         if (blob) {
             this.audioUrl = URL.createObjectURL(blob);
         }
@@ -46,6 +50,7 @@ class TrackLoader {
             } else if (blob.type === 'audio/wav') {
                 this.audio.setAttribute('type', 'audio/wav');
             }
+            this.audio.load();
             this.audio.play();
             (() =>{
                 if(this.audio.paused) {
@@ -60,34 +65,33 @@ class TrackLoader {
     }
 }
 
-window.onload = () => {
-    const trackLoader = new TrackLoader(
-        document.querySelector('#audio-tag'),
-        document.querySelector('#playlists'),
-        document.querySelector('#track-name-output'),
-    );
 
-    //event on changing playlist
-    trackLoader.playlists.addEventListener('change', () => {
-        trackLoader.trackRequest(trackLoader.playlists.value);
-    });
+const trackLoader = new TrackLoader(
+    document.querySelector('#audio-tag'),
+    document.querySelector('#playlists'),
+    document.querySelector('#track-name-output'),
+);
 
-    //control buttons events
-    trackLoader.switchers.prev.addEventListener('click', () => {
-        trackLoader.trackRequest(trackLoader.playlists.value, "prev");
-    });
+//event on changing playlist
+trackLoader.playlists.addEventListener('change', () => {
+    trackLoader.trackRequest(trackLoader.playlists.value);
+});
 
-    trackLoader.switchers.next.addEventListener('click', () => {
+//control buttons events
+trackLoader.switchers.prev.addEventListener('click', () => {
+    trackLoader.trackRequest(trackLoader.playlists.value, "prev");
+});
+
+trackLoader.switchers.next.addEventListener('click', () => {
+    trackLoader.trackRequest(trackLoader.playlists.value, "next");
+});
+
+//first track
+trackLoader.trackRequest(trackLoader.playlists.value);
+
+//autoplay next tracks
+setInterval(()=>{
+    if (trackLoader.audio.ended) {
         trackLoader.trackRequest(trackLoader.playlists.value, "next");
-    });
-    
-    //first track
-    trackLoader.trackRequest(trackLoader.playlists.value);//!
-
-    //autoplay next tracks
-    setInterval(()=>{
-		if (trackLoader.audio.ended) {
-            trackLoader.trackRequest(trackLoader.playlists.value, "next");
-		}
-	}, 900);
-}
+    }
+}, 900);

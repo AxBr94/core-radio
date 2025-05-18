@@ -33,6 +33,10 @@ get "/playlist/:playlist/direction/:direction" do
 
     content_type TYPER.return_type(track)
 
+    headers 'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+        'Pragma' => 'no-cache',
+        'Expires' => '0'
+
     send_file track, filename: "#{File.basename track}", disposition: "inline"
   end
 end
