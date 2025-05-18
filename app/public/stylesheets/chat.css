@@ -1,0 +1,20 @@
+body {
+    margin: 0px;
+    background-color: black;
+
+    .messenge-list {
+        font-family: Helvetica, sans-serif;
+        text-align: left;
+        color: lightgray;
+        list-style-type: decimal;
+
+        .user-name {
+            color: white;
+            font-family: monospace;
+        }
+    }
+
+    .messenge-list li:nth-child(2n) {
+        margin-left: 2rem;
+    }
+}

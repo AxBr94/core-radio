@@ -1,7 +1,7 @@
 #Track controller class
 class TrackManager
   BASE_PATH = "tracks/"
-  @@genres = [ "hardcore", "crust", "crossover" ]
+  @@genres = Dir.children(BASE_PATH)
 
   def initialize
     #key-value data included an array of files and index of current track
