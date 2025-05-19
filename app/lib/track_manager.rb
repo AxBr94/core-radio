@@ -15,10 +15,11 @@ class TrackManager
   end
 
   #track switchers
-  def first_track(playlist_name)
-    tracklist = find_data(playlist_name) 
-    tracklist[:current_track] = 0
-    tracklist[:tracks][tracklist[:current_track]]
+  def random_track(playlist_name)
+    tracklist = find_data(playlist_name)
+    index = rand tracklist[:tracks].length
+    tracklist[:current_track] = index
+    tracklist[:tracks][index]
   end
 
   def next_track(playlist_name)
@@ -49,6 +50,12 @@ class TrackManager
       data[:name] == playlist_name
     end
     tracklist
+  end
+
+  def first_track(playlist_name)
+    tracklist = find_data(playlist_name) 
+    tracklist[:current_track] = 0
+    tracklist[:tracks][tracklist[:current_track]]
   end
 end
 

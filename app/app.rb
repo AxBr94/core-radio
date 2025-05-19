@@ -28,7 +28,7 @@ get "/playlist/:playlist/direction/:direction" do
     elsif direction == "prev"
       track = TRACK_MANAGER.prev_track(playlist)
     else
-      track = TRACK_MANAGER.first_track(playlist)
+      track = TRACK_MANAGER.random_track(playlist)
     end
 
     content_type TYPER.return_type(track)
