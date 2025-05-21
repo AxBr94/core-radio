@@ -1,6 +1,7 @@
 require "sinatra"
 require "date"
 require_relative "lib/track_manager.rb"
+require_relative "lib/chat_service"
 require_relative "lib/content_type_helper"
 
 set(:bind, "127.0.0.1")
