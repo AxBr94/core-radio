@@ -1,5 +1,6 @@
 require "sinatra"
 require "date"
+require "json"
 require_relative "lib/track_manager.rb"
 require_relative "lib/chat_service"
 require_relative "lib/content_type_helper"
@@ -46,6 +47,10 @@ get "/chat" do
   status 200
 
   erb :chat
+end
+
+post "/chat" do
+  #params/request[...] + JSON.parse(..., symbolize_names: true)
 end
 
 #All URLs except the rooth path will be redirected to 404 page
