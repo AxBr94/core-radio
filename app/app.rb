@@ -8,6 +8,12 @@ require_relative "lib/content_type_helper"
 set(:bind, "127.0.0.1")
 set(:port, 3000)
 
+before do
+  if request.request_method == "GET"
+    headers "X-Robots-Tag" => "noindex"
+  end
+end
+
 get "/" do
   status 200
   date = Time.new
@@ -35,9 +41,9 @@ get "/playlist/:playlist/direction/:direction" do
 
     content_type TYPER.return_type(track)
 
-    headers 'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
-        'Pragma' => 'no-cache',
-        'Expires' => '0'
+    headers "Cache-Control" => "no-store, no-cache, must-revalidate, max-age=0",
+        "Pragma" => "no-cache",
+        "Expires" => "0"
 
     send_file track, filename: "#{File.basename track}", disposition: "inline"
   end

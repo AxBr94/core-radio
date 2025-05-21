@@ -3,21 +3,21 @@ require "redis"
 redis = Redis.new(
   host: "127.0.0.1",
   port: 6379,
-  db: 0,
-  username: "test",
-  password: "test"
+  db: 0
+  # username: "test",
+  # password: "test"
 )
 
 class ChatHandler
   def initialize(redis)
-    @data = set_data redis
+    @redis = set_data redis
   end
 
   private
 
   def set_data(redis)
-    unless redis.get("messages").instance_of?(Array)
-      redis.set("messages", [])
+    unless redis.exists?("messages")
+      redis.set("messages",)
     end 
   end
 end
@@ -25,7 +25,8 @@ end
 class ChatService < ChatHandler
   def get_messages   
     begin
-      @data.get "messages"#.reverse
+      puts @redis
+      @redis.get "messages"#.reverse
     rescue => error
       puts error.message
     end
@@ -33,7 +34,7 @@ class ChatService < ChatHandler
 
   def set_message(message)
     begin
-      @data.set message
+      @redis.set message
       remove_last_message
     rescue => error
       puts error.message
@@ -44,12 +45,11 @@ class ChatService < ChatHandler
 
   def remove_last_message
     begin
-      @data.rpop if @data.llen > 10#, RPOP key
+      @redis.rpop("messages") if @redis.llen > 10#, RPOP key
     rescue => error
       puts error.message
     end
   end
 end
 
-ChatHandler.new redis
-CHAT_SERVICE = ChatService.new 
+CHAT_SERVICE = ChatService.new redis
