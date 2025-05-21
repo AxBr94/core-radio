@@ -10,6 +10,7 @@ class TrackLoader {
             prev: document.querySelector('#prev-track'),
             next: document.querySelector('#next-track'),
         };
+        this.playedTracks = new Set();
 
     }
 
@@ -37,7 +38,8 @@ class TrackLoader {
                 .replace('inline; filename=', '')
                 .replace(/["_]/g, ' ')
                 .replace(/(.flac)|(.mp3)|(.wav)$/, '');
-            this.output.textContent = trackName;
+            this.output.textContent = `🎵${trackName}`;
+            this.playedTracks.add(trackName);
             return response.blob();
         })
         .then(blob => {
@@ -86,12 +88,20 @@ trackLoader.switchers.next.addEventListener('click', () => {
     trackLoader.trackRequest(trackLoader.playlists.value, "next");
 });
 
-//first track
+//random track
 trackLoader.trackRequest(trackLoader.playlists.value);
 
 //autoplay next tracks
 setInterval(()=>{
     if (trackLoader.audio.ended) {
         trackLoader.trackRequest(trackLoader.playlists.value, "next");
+    }
+
+    const playedTracksOutput = document.querySelector('#played-tracks');
+
+    for (let track of trackLoader.playedTracks) {
+        if (!playedTracksOutput.textContent.includes(track)) {
+            playedTracksOutput.textContent += `${track}; `;
+        }
     }
 }, 900);
