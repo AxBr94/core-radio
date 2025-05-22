@@ -63,6 +63,8 @@ end
 post "/chat" do
   status 202
   message = JSON.load(request.body.read)
+  response.set_cookie("username", message["userName"])
+  #puts message, message.username set cookie
   CHAT_SERVICE.set_message message
 end
 

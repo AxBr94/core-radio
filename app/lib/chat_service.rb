@@ -15,7 +15,7 @@ class ChatService
 
   def get_messages   
     begin
-      if @redis.exists?
+      if @redis.exists?("messages")
         @redis.lrange("messages", 0, -1)#.reverse
       else
         {content: "empty"}
@@ -39,7 +39,7 @@ class ChatService
   def remove_last_message
     begin
       if @redis.llen("messages") > 10
-        @redis.rpop("messages")
+        @redis.rpop "messages"
       end
     rescue => error
       puts error.message
