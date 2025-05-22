@@ -36,7 +36,7 @@ class ChatService
 
   def remove_last_message
     begin
-      @redis.rpop("messages") if @redis.llen > 10
+      @redis.rpop("messages") if @redis.llen("messages") > 10
     rescue => error
       puts error.message
     end
