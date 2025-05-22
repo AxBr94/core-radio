@@ -1,9 +1,8 @@
-require "sinatra"
-require "date"
-require "json"
-require_relative "lib/track_manager.rb"
-require_relative "lib/chat_service"
-require_relative "lib/content_type_helper"
+[ "sinatra", "date", "json" ].each { |lib| require lib }
+
+[ "lib/track_manager.rb", "lib/chat_service", "lib/content_type_helper" ].each do |lib|
+  require_relative lib
+end
 
 set(:bind, "127.0.0.1")
 set(:port, 3000)
@@ -51,12 +50,20 @@ end
 
 get "/chat" do
   status 200
-
+  content_type "text/html"
   erb :chat
 end
 
+get "/chat/messages" do
+  status 200
+  content_type "application/json"
+  CHAT_SERVICE.get_messages.to_json
+end
+
 post "/chat" do
-  #params/request[...] + JSON.parse(..., symbolize_names: true)
+  status 202
+  message = JSON.load(request.body.read)
+  CHAT_SERVICE.set_message message
 end
 
 #All URLs except the rooth path will be redirected to 404 page

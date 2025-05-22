@@ -8,25 +8,16 @@ redis = Redis.new(
   # password: "test"
 )
 
-class ChatHandler
+class ChatService
   def initialize(redis)
-    @redis = set_data redis
+    @redis = redis
   end
 
-  private
-
-  def set_data(redis)
-    unless redis.exists?("messages")
-      redis.set("messages",)
-    end 
-  end
-end
-
-class ChatService < ChatHandler
   def get_messages   
     begin
-      puts @redis
-      @redis.get "messages"#.reverse
+      if @redis.exists?
+        @redis.lrange("messages", 0, -1)#.reverse
+      end
     rescue => error
       puts error.message
     end
@@ -34,7 +25,7 @@ class ChatService < ChatHandler
 
   def set_message(message)
     begin
-      @redis.set message
+      @redis.lpush("messages", message) 
       remove_last_message
     rescue => error
       puts error.message
@@ -45,7 +36,7 @@ class ChatService < ChatHandler
 
   def remove_last_message
     begin
-      @redis.rpop("messages") if @redis.llen > 10#, RPOP key
+      @redis.rpop("messages") if @redis.llen > 10
     rescue => error
       puts error.message
     end
