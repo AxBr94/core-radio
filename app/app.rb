@@ -1,6 +1,6 @@
-[ "sinatra", "date", "json" ].each { |lib| require lib }
+[ "sinatra", "json" ].each { |lib| require lib }
 
-[ "lib/track_manager.rb", "lib/chat_service", "lib/content_type_helper" ].each do |lib|
+[ "lib/track_manager.rb", "lib/chat_service", "lib/date_helper.rb", "lib/content_type_helper" ].each do |lib|
   require_relative lib
 end
 
@@ -15,8 +15,8 @@ end
 
 get "/" do
   status 200
-  date = Time.new
-  @date = "#{date.day}-#{date.month}-#{date.year}"
+  @date = DateSetter.new.get_formatted_date
+  content_type "text/html"
   erb :index
 end
 
@@ -57,13 +57,14 @@ end
 get "/chat/messages" do
   status 200
   content_type "application/json"
-  CHAT_SERVICE.get_messages.to_json
+  CHAT_SERVICE.get_messages[0].to_json
 end
 
 post "/chat" do
   status 202
   message = JSON.load(request.body.read)
   response.set_cookie("username", message["userName"])
+  message["date"] = DateSetter.new.get_formatted_date
   #puts message, message.username set cookie
   CHAT_SERVICE.set_message message
 end

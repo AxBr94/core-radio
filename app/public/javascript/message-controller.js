@@ -6,14 +6,34 @@ class MessageController {
         this.userName = this.setUserName(userName);
         this.data = {
             userName: userName,
-            message: messageText
+            message: messageText,
+            date: ""
         };
+    }
+
+    appendMessage(message) {
+        console.log(message);
+  /*      messages.forEach(message => {
+            
+            let sample = `<li class="message">
+                <article>
+                    <p class="user-name">${message.userName}</p>
+                    <p>
+                    ${message.messageText}
+                    </p>
+                    <time>${message.date}</time>
+                </article>
+                </li>
+                <hr>`
+
+            this.output.appendChild(sample); 
+        });*/
     }
 
     getMessages() {
         fetch('http://127.0.0.1:3000/chat/messages')
             .then(response => response.json())
-            .then(json => console.log(json));
+            .then(json => this.appendMessage(JSON.parse(json)));
     }
 
     sendMessage() {
@@ -28,12 +48,14 @@ class MessageController {
     }
     
 
-    setUserName(userName) {////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    setUserName(userName) {
         if(userName !== 'Anon') {
-            this.userName = userName;
-            document.querySelector('#user-name').value = document.cookie.replace('username=', '');
+            userName = document.cookie.replace('username=', '');
+            return userName;
         } 
     }
+
+
 }
 
 const sendButton = document.querySelector('#send-button');
@@ -47,5 +69,7 @@ sendButton.addEventListener('click', () => {
 
     messageController.sendMessage();
     messageController.getMessages();
+    
+    
 });
 
