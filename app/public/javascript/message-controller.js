@@ -1,8 +1,8 @@
 'use strict';
 
 class MessageController {
-    constructor(messangeList, userName, messageText) {
-        this.output = messangeList;
+    constructor(messageList, userName, messageText) {
+        this.output = messageList;
         this.userName = this.setUserName(userName);
         this.data = {
             userName: userName,
@@ -11,29 +11,25 @@ class MessageController {
         };
     }
 
-    appendMessage(message) {
-        console.log(message);
-  /*      messages.forEach(message => {
-            
-            let sample = `<li class="message">
-                <article>
-                    <p class="user-name">${message.userName}</p>
-                    <p>
-                    ${message.messageText}
-                    </p>
-                    <time>${message.date}</time>
-                </article>
-                </li>
-                <hr>`
-
-            this.output.appendChild(sample); 
-        });*/
+    appendMessage(messages) {//!!!!!!!!!!!!!
+        for(let message in messages) {
+            const li = document.createElement('li');
+            li.setAttribute('class', 'message');
+            li.innerHTML = `<article>
+                <p class="user-name">${message.userName}</p>
+                <p>
+                    ${message.message}
+                </p>
+                <time>${message.date}</time>
+            </article>`;
+            this.output.appendChild(li);
+        }
     }
 
     getMessages() {
         fetch('http://127.0.0.1:3000/chat/messages')
             .then(response => response.json())
-            .then(json => this.appendMessage(JSON.parse(json)));
+            .then(json => this.appendMessage(json));
     }
 
     sendMessage() {
@@ -62,14 +58,12 @@ const sendButton = document.querySelector('#send-button');
 
 sendButton.addEventListener('click', () => {
     const messageController = new MessageController(
-        document.querySelector('#messenge-list'),
+        document.querySelector('#message-list'),
         document.querySelector('#user-name').value,
         document.querySelector('#message-text').value
     );
 
     messageController.sendMessage();
     messageController.getMessages();
-    
-    
 });
 
