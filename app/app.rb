@@ -57,10 +57,7 @@ end
 get "/chat/messages" do
   status 200
   content_type "application/json"
-  messages = CHAT_SERVICE.get_messages.map do |message|
-    JSON.parse message
-  end
-  messages.to_json
+  CHAT_SERVICE.get_messages.to_json
 end
 
 post "/chat" do
@@ -68,8 +65,7 @@ post "/chat" do
   message = JSON.load(request.body.read)
   response.set_cookie("username", message["userName"])
   message["date"] = DateSetter.new.get_formatted_date
-  #puts message, message.username set cookie
-  CHAT_SERVICE.set_message(message.to_json)
+  CHAT_SERVICE.set_message message
 end
 
 #All URLs except the rooth path will be redirected to 404 page

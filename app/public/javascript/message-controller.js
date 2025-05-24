@@ -11,16 +11,28 @@ class MessageController {
         };
     }
 
-    appendMessage(messages) {//!!!!!!!!!!!!!
-        for(let message in messages) {
-            const li = document.createElement('li');
-            li.setAttribute('class', 'message');
+    renderMessages(messages) {
+        let li = document.createElement('li');
+        li.setAttribute('class', 'message');
+        for(let message of messages.slice(0, 8)) {
+            console.log(messages)
+
             li.innerHTML = `<article>
                 <p class="user-name">${message.userName}</p>
                 <p>
                     ${message.message}
                 </p>
                 <time>${message.date}</time>
+            </article>`;
+            this.output.appendChild(li);       
+        }
+        if(messages[9]) {
+            li.innerHTML = `<article>
+                <p class="user-name">${messages[9].userName}</p>
+                <p>
+                    ${messages[9].message}
+                </p>
+                <time>${messages[9].date}</time>
             </article>`;
             this.output.appendChild(li);
         }
@@ -29,7 +41,7 @@ class MessageController {
     getMessages() {
         fetch('http://127.0.0.1:3000/chat/messages')
             .then(response => response.json())
-            .then(json => this.appendMessage(json));
+            .then(json => this.renderMessages(json));
     }
 
     sendMessage() {
@@ -50,20 +62,17 @@ class MessageController {
             return userName;
         } 
     }
-
-
 }
 
 const sendButton = document.querySelector('#send-button');
 
-sendButton.addEventListener('click', () => {
+sendButton.addEventListener('click', async () => {
     const messageController = new MessageController(
         document.querySelector('#message-list'),
         document.querySelector('#user-name').value,
         document.querySelector('#message-text').value
     );
-
-    messageController.sendMessage();
-    messageController.getMessages();
+    await setTimeout(messageController.sendMessage, 1);
+    await setTimeout(messageController.getMessages, 1);
 });
 
