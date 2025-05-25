@@ -50,12 +50,6 @@ end
 
 get "/chat" do
   status 200
-  content_type "text/html"
-  erb :chat
-end
-
-get "/chat/messages" do
-  status 200
   content_type "application/json"
   CHAT_SERVICE.get_messages.to_json
 end

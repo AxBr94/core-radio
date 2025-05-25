@@ -1,5 +1,30 @@
 'use strict';
 
+class ChatWindow {
+    constructor(chatSection) {
+        this.opened = false;
+        this.chatSection = chatSection;
+    }
+
+    open() {
+        this.chatSection.style.display = 'block';
+        this.opened = true;
+    }
+
+    close() {
+        this.chatSection.style.display = 'none';
+        this.opened = false;
+    }
+}
+
+const chatLink = document.querySelector('#chat-link');
+const chatWindow = new ChatWindow(document.querySelector('#chat'));
+
+chatLink.addEventListener('click', () => {
+    chatWindow.opened ? chatWindow.close() : chatWindow.open();
+
+});
+
 class MessageController {
     constructor(messageList, userName, messageText) {
         this.output = messageList;
@@ -8,24 +33,17 @@ class MessageController {
         this.data = {
             userName: userName,
             message: messageText,
-            date: ""
+            date: ""//will be set on server side
         };
     }
-
-    /* setUserName(userName) {
-        if(userName !== 'Anon') {
-            userName = 
-            return userName;
-        } 
-    } */
 
     renderMessages(messages) {
         for(let message of messages) {
             let li = document.createElement('li');
             li.setAttribute('class', 'message');
             li.innerHTML = `<article>
-                <p class="user-name">${message.userName}</p>
-                <p>
+                <p class="message-user-name">${message.userName}</p>
+                <p class="message-user-text">
                     ${message.message}
                 </p>
                 <time>${message.date}</time>
@@ -39,14 +57,14 @@ class MessageController {
     }
 
     getMessages() {
-        fetch('http://127.0.0.1:3000/chat/messages')
+        fetch('http://127.0.0.1:3000/chat')
             .then(response => response.json())
             .then(json => this.renderMessages(json))
             .catch(error => console.error(error));
     }
 
     sendMessage() {
-        if(this.messageText.length > 0 && this.userName.length > 0) {
+        if(this.messageText.length > 0) {
             fetch('http://127.0.0.1:3000/chat', {
                 method: 'POST',
                 headers: {
@@ -55,7 +73,7 @@ class MessageController {
                 body: JSON.stringify(this.data)
             })
             .then(() => {
-                document.querySelector('#message-text').value = "";
+                document.querySelector('#message-form-text').value = "";
             })
             .catch(error => console.error(error));
         } else {
@@ -64,17 +82,21 @@ class MessageController {
     }
 }
 
-const sendButton = document.querySelector('#send-button');
-
-sendButton.addEventListener('click', () => {  
+const createMessageController = () => {
     const messageController = new MessageController(
         document.querySelector('#message-list'),
-        document.querySelector('#user-name').value,
-        document.querySelector('#message-text').value
+        document.querySelector('#user-form-name').value,
+        document.querySelector('#message-form-text').value
     );
-    messageController.sendMessage();
-    
-    setTimeout(() => {
-        messageController.getMessages();
-    }, 100);
+
+    return messageController;
+}
+
+createMessageController().getMessages();
+
+const sendButton = document.querySelector('#send-button');
+
+sendButton.addEventListener('click', async () => {
+    await createMessageController().sendMessage();
+    await createMessageController().getMessages();
 });
