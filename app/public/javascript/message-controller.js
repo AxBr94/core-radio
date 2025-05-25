@@ -59,7 +59,7 @@ class MessageController {
             })
             .catch(error => console.error(error));
         } else {
-            alert('Your post is empty');
+            alert('Empty form in post');
         }
     }
 }

@@ -1,22 +1,20 @@
 body {
     margin: 0px;
-    background-color: black;
+    background-color: black;  
+}
 
-    .message-list {
-        font-family: Helvetica, sans-serif;
-        text-align: left;
-        color: lightgray;
-        list-style-type: decimal;
+body .message-list {
+    font-family: Helvetica, sans-serif;
+    text-align: left;
+    color: lightgray;
+    list-style-type: decimal;  
+}
 
-        .message {
-            border-top: 1px solid lightgray;
+body .message-list .message {
+    border-top: 1px solid lightgray; 
+}
 
-            .user-name {
-                color: white;
-                font-family: monospace;
-            }
-        }
-
-        
-    }
+body .message-list .message .user-name {
+    color: white;
+    font-family: monospace;
 }
