@@ -59,13 +59,13 @@ post "/chat" do
   message = JSON.load(request.body.read)
   response.set_cookie("username", message["userName"])
   message["date"] = DateSetter.new.get_formatted_date
-  CHAT_SERVICE.set_message message
+  if message["userName"].length <= 20
+    CHAT_SERVICE.set_message message if message["message"].length > 0 
+  end  
 end
 
 #All URLs except the rooth path will be redirected to 404 page
-# get %r{.*} do
-#   status 404
-#   erb :"#{404}"
-#   sleep 3
-#   redirect "/"
-# end
+not_found do
+  status 404
+  erb :"#{404}"
+end

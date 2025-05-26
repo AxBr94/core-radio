@@ -6,7 +6,7 @@ body {
 main {
     margin: auto;
     width: 40%;
-    padding: 10px;
+    min-height: 100vh;
     height: auto;
     background-color: #515151;
 }
@@ -83,6 +83,11 @@ main .address-text .chat-link {
     padding: 10px;
     border: 1px solid black;
     background-color: #515151;
+    font-family: Helvetica, sans-serif;
+}
+
+.chat .chat-caption {
+    font-size: 0.5rem;
 }
 
 .chat .message-list {
@@ -92,7 +97,6 @@ main .address-text .chat-link {
     min-height: 10vh;
     max-height: 30vh;
     padding: 0px;
-    font-family: Helvetica, sans-serif;
     text-align: left;
     color: lightgray;
     list-style-type: decimal; 

@@ -37,62 +37,72 @@ class MessageController {
         };
     }
 
-    getMessages() {
-        fetch('http://127.0.0.1:3000/chat')
-            .then(response => response.json())
-            .then(json => {
-                for(let message of json) {
-                    let li = document.createElement('li');
-                    li.setAttribute('class', 'message');
-                    li.innerHTML = `<article>
-                        <h2 class="message-user-name">${message.userName}</h2>
-                        <p class="message-user-text">
-                            ${message.message}
-                        </p>
-                        <time>${message.date}</time>
-                    </article>`;
-                    this.output.appendChild(li);
-                    
-                    if([...this.output.children].length > 10){
-                        this.output.firstElementChild.remove();
-                    }
+    async getMessages() {
+        try {
+            const response = await fetch('http://127.0.0.1:3000/chat');
+            const json = await response.json();
+
+            for (let message of json) {
+                let li = document.createElement('li');
+                li.setAttribute('class', 'message');
+                li.innerHTML = `<article>
+                    <h2 class="message-user-name">${message.userName}</h2>
+                    <p class="message-user-text">${message.message}</p>
+                    <time>${message.date}</time>
+                </article>`;
+                this.output.appendChild(li);
+
+                if ([...this.output.children].length > 10) {
+                    this.output.firstElementChild.remove();
                 }
-            })
-            .catch(error => console.error(error));
+            }
+        } catch (error) {
+            console.error('Ошибка при получении сообщений:', error);
+        }
     }
 
-    sendMessage() {
-        if(this.messageText.length > 0) {
-            fetch('http://127.0.0.1:3000/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(this.data)
-            })
-            .then(() => {
+    async sendMessage() {
+        if (this.messageText.length > 0) {
+            try {
+                await fetch('http://127.0.0.1:3000/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(this.data)
+                });
+
                 document.querySelector('#message-form-text').value = "";
-            })
-            .catch(error => console.error(error));
+            } catch (error) {
+                console.error('Ошибка при отправке сообщения:', error);
+            }
         } else {
             alert('Empty form in post');
         }
     }
 }
 
-const createMessageController = () => {
+const creareMessageController = () => {
     const messageController = new MessageController(
         document.querySelector('#message-list'),
         document.querySelector('#user-form-name').value,
         document.querySelector('#message-form-text').value
     );
+
     return messageController;
 }
 
-createMessageController().getMessages();
+creareMessageController().getMessages();
 
 const sendButton = document.querySelector('#send-button');
 
-sendButton.addEventListener('click', () => {
-    createMessageController().sendMessage();
-}); 
+sendButton.addEventListener('click', async () => {
+    const mc = creareMessageController();
+
+    try {
+        await mc.sendMessage();
+        await mc.getMessages();
+    } catch (error) {
+        console.error('Ошибка при отправке или получении сообщений:', error);
+    }
+});
