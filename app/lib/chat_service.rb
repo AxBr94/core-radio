@@ -1,12 +1,13 @@
 require "mysql2"
+require "dotenv/load"
 
 class DataHolder
   def initialize
     @db = Mysql2::Client.new(
-      host: "localhost",
-      username: "admin",#.env!
-      password: "1234",#.env!
-      database: "coreradio"
+      host: ENV["DB_HOST"],
+      username: ENV["DB_USER"],
+      password: ENV["DB_PASSWORD"],
+      database: ENV["DB_NAME"]
     )
   end
 end
