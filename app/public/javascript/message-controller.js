@@ -37,29 +37,27 @@ class MessageController {
         };
     }
 
-    renderMessages(messages) {
-        for(let message of messages) {
-            let li = document.createElement('li');
-            li.setAttribute('class', 'message');
-            li.innerHTML = `<article>
-                <p class="message-user-name">${message.userName}</p>
-                <p class="message-user-text">
-                    ${message.message}
-                </p>
-                <time>${message.date}</time>
-            </article>`;
-            this.output.appendChild(li);
-            
-            if([...this.output.children].length > 10){
-                this.output.firstElementChild.remove();
-            }
-        }
-    }
-
     getMessages() {
         fetch('http://127.0.0.1:3000/chat')
             .then(response => response.json())
-            .then(json => this.renderMessages(json))
+            .then(json => {
+                for(let message of json) {
+                    let li = document.createElement('li');
+                    li.setAttribute('class', 'message');
+                    li.innerHTML = `<article>
+                        <h2 class="message-user-name">${message.userName}</h2>
+                        <p class="message-user-text">
+                            ${message.message}
+                        </p>
+                        <time>${message.date}</time>
+                    </article>`;
+                    this.output.appendChild(li);
+                    
+                    if([...this.output.children].length > 10){
+                        this.output.firstElementChild.remove();
+                    }
+                }
+            })
             .catch(error => console.error(error));
     }
 
@@ -88,7 +86,6 @@ const createMessageController = () => {
         document.querySelector('#user-form-name').value,
         document.querySelector('#message-form-text').value
     );
-
     return messageController;
 }
 
@@ -96,7 +93,6 @@ createMessageController().getMessages();
 
 const sendButton = document.querySelector('#send-button');
 
-sendButton.addEventListener('click', async () => {
-    await createMessageController().sendMessage();
-    await createMessageController().getMessages();
-});
+sendButton.addEventListener('click', () => {
+    createMessageController().sendMessage();
+}); 
