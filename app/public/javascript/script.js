@@ -57,7 +57,7 @@ class TrackLoader {
             (() =>{
                 if(this.audio.paused) {
                     alert(
-                        'Your browser blocks autoplay. Turn it on in the panel before the site URL and reload the page'
+                        '⚙️ Your browser blocks autoplay.\nTurn it on in the panel before the site URL and reload the page'
                     );
                 }
             })();

@@ -6,6 +6,7 @@ end
 
 set(:bind, "127.0.0.1")
 set(:port, 3000)
+set(:environment, ENV["APP_ENV"])
 
 before do
   if request.request_method == "GET"
