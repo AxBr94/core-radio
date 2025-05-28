@@ -41,8 +41,9 @@ class MessageController {
         try {
             const response = await fetch('http://127.0.0.1:3000/chat');
             const json = await response.json();
-
+            this.output.innerHTML = "";
             for (let message of json) {
+                //this.output.innerHTML = "";
                 let li = document.createElement('li');
                 li.setAttribute('class', 'message');
                 li.innerHTML = `<article>
@@ -51,13 +52,9 @@ class MessageController {
                     <time>${message.date}</time>
                 </article>`;
                 this.output.appendChild(li);
-
-                if ([...this.output.children].length > 10) {
-                    this.output.firstElementChild.remove();
-                }
             }
         } catch (error) {
-            console.error('Ошибка при получении сообщений:', error);
+            console.error(error);
         }
     }
 

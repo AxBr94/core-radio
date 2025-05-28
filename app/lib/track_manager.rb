@@ -1,14 +1,17 @@
 #Track controller class
 class TrackManager
   BASE_PATH = "tracks/"
-  @@genres = Dir.children(BASE_PATH)
+
+  attr_reader :genres
 
   def initialize
+    #dir-s contains tracks
+    @genres = Dir.children(BASE_PATH)
     #key-value data included an array of files and index of current track
-    @tracklist_data = Array.new(@@genres.length) do |i|
+    @tracklist_data = Array.new(@genres.length) do |i|
       {
-        name: @@genres[i],
-        tracks: Dir.glob("#{BASE_PATH}#{@@genres[i]}/*").shuffle!,
+        name: @genres[i],
+        tracks: Dir.glob("#{BASE_PATH}#{@genres[i]}/*").shuffle!,
         current_track: 0
       }
     end

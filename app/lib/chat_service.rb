@@ -9,12 +9,14 @@ class DataHolder
       password: ENV["DB_PASSWORD"],
       database: ENV["DB_NAME"]
     )
+    @schema = File.read("db/schema.sql")
   end
 end
 
 class ChatService < DataHolder
   def get_messages   
     begin
+      create_table
       data = @db.query("SELECT userName, message, date FROM chat;")
       data.to_a
     rescue => error
@@ -24,6 +26,7 @@ class ChatService < DataHolder
 
   def set_message(message)
     begin
+      create_table
       stmt = @db.prepare("INSERT INTO chat(userName, message, date) VALUES(?, ?, ?);")
       stmt.execute(message["userName"], message["message"], message["date"])
       remove_last_message
@@ -33,6 +36,10 @@ class ChatService < DataHolder
   end
 
   private
+
+  def create_table
+    @db.query(@schema)
+  end
 
   def remove_last_message
     last_entry = @db.query("SELECT id FROM chat ORDER BY id LIMIT 1;").to_a.first

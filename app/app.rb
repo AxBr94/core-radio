@@ -16,6 +16,7 @@ end
 
 get "/" do
   status 200
+  @playlists = TRACK_MANAGER.genres
   @date = DateSetter.new.get_formatted_date
   content_type "text/html"
   erb :index
@@ -61,7 +62,9 @@ post "/chat" do
   response.set_cookie("username", message["userName"])
   message["date"] = DateSetter.new.get_formatted_date
   if message["userName"].length <= 20 and message["userName"].length > 0
-    CHAT_SERVICE.set_message message if message["message"].length > 0 
+    if message["message"].length > 0 and message["message"].length <= 200
+      CHAT_SERVICE.set_message message
+    end
   end  
 end
 

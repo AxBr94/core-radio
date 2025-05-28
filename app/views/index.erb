@@ -19,9 +19,9 @@
       <audio autoplay id="audio-tag" preload="none">Unsupported file format</audio>
       <form class="buttons-container" action="#">
         <select id="playlists" class="playlists">
-          <option selected value="hardcore">hardcore</option>
-          <option value="crust">crust</option>
-          <option value="crossover">crossover</option>
+          <% @playlists.each do |playlist| %>
+            <%= "<option #{playlist == "hardcore"? "selected" : nil} value=\"#{playlist}\">#{playlist}</option>" %>
+          <% end %>
         </select>
         <button type="button" class="buttons" id="prev-track"><</button>
         <button type="button" class="buttons" id="next-track">></button>
