@@ -115,6 +115,11 @@ main .address-text .chat-link {
     font-size: 0.7rem;
 }
 
+.chat .message-list .message .message-user-text {
+    white-space: pre-line;
+    word-wrap: break-word;
+}
+
 .chat .message-form .user-form-name {
     width: 100%;
 } 
