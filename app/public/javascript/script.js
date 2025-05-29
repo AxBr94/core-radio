@@ -11,7 +11,6 @@ class TrackLoader {
             next: document.querySelector('#next-track'),
         };
         this.playedTracks = new Set();
-
     }
 
     setAudioUrl(blob) {
@@ -25,7 +24,8 @@ class TrackLoader {
     }
     
     trackRequest(playlist, direction) {
-        fetch(`http://127.0.0.1:3000/playlist/${playlist}/direction/${direction}`, {
+        //testing port :3000
+        fetch(`http://127.0.0.1:80/playlist/${playlist}/direction/${direction}`, {
             headers: {
               'X-Requested-With': 'XMLHttpRequest'
             }

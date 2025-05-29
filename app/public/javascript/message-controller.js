@@ -22,7 +22,6 @@ const chatWindow = new ChatWindow(document.querySelector('#chat'));
 
 chatLink.addEventListener('click', () => {
     chatWindow.opened ? chatWindow.close() : chatWindow.open();
-
 });
 
 class MessageController {
@@ -39,11 +38,15 @@ class MessageController {
 
     async getMessages() {
         try {
-            const response = await fetch('http://127.0.0.1:3000/chat');
+            //testing port :3000
+            const response = await fetch('http://127.0.0.1:80/chat', {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
             const json = await response.json();
             this.output.innerHTML = "";
             for (let message of json) {
-                //this.output.innerHTML = "";
                 let li = document.createElement('li');
                 li.setAttribute('class', 'message');
                 li.innerHTML = `<article>
@@ -61,7 +64,8 @@ class MessageController {
     async sendMessage() {
         if (this.messageText.length > 0) {
             try {
-                await fetch('http://127.0.0.1:3000/chat', {
+                //testing port :3000
+                await fetch('http://127.0.0.1:80/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
