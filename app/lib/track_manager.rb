@@ -37,12 +37,12 @@ class TrackManager
 
   def prev_track(playlist_name)
     tracklist = find_data(playlist_name) 
-    unless tracklist[:current_track] == tracklist[:tracks].first
-      tracklist[:current_track] -= 1
+    if tracklist[:current_track] == 0
+      tracklist[:current_track] = tracklist[:tracks].length-1
       tracklist[:tracks][tracklist[:current_track]]
     else
-      tracklist[:current_track] = tracklist[:tracks].length-1
-      tracklist[:tracks].last
+      tracklist[:current_track] -= 1
+      tracklist[:tracks][tracklist[:current_track]]
     end
   end
 

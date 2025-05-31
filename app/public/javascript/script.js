@@ -25,7 +25,7 @@ class TrackLoader {
     
     trackRequest(playlist, direction) {
         //testing port :3000
-        fetch(`http://127.0.0.1:80/playlist/${playlist}/direction/${direction}`, {
+        fetch(`http://127.0.0.1:3000/playlist/${playlist}/direction/${direction}`, {
             headers: {
               'X-Requested-With': 'XMLHttpRequest'
             }

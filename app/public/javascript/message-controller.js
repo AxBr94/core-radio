@@ -39,7 +39,7 @@ class MessageController {
     async getMessages() {
         try {
             //testing port :3000
-            const response = await fetch('http://127.0.0.1:80/chat', {
+            const response = await fetch('http://127.0.0.1:3000/chat', {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
@@ -65,7 +65,7 @@ class MessageController {
         if (this.messageText.length > 0) {
             try {
                 //testing port :3000
-                await fetch('http://127.0.0.1:80/chat', {
+                await fetch('http://127.0.0.1:3000/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
