@@ -11,20 +11,13 @@ class TrackManager
     @tracklist_data = Array.new(@genres.length) do |i|
       {
         name: @genres[i],
-        tracks: Dir.glob("#{BASE_PATH}#{@genres[i]}/*").shuffle!,
+        tracks: Dir.glob("#{BASE_PATH}#{@genres[i]}/*").shuffle,
         current_track: 0
       }
     end
   end
 
   #track switchers
-  def random_track(playlist_name)
-    tracklist = find_data(playlist_name)
-    index = rand tracklist[:tracks].length
-    tracklist[:current_track] = index
-    tracklist[:tracks][index]
-  end
-
   def next_track(playlist_name)
     tracklist = find_data(playlist_name) 
     unless tracklist[:current_track] == tracklist[:tracks].length-1
@@ -44,6 +37,11 @@ class TrackManager
       tracklist[:current_track] -= 1
       tracklist[:tracks][tracklist[:current_track]]
     end
+  end
+
+  def continue(playlist_name)
+    tracklist = find_data(playlist_name)
+    tracklist[:tracks][tracklist[:current_track]]
   end
 
   private

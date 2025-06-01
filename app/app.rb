@@ -29,23 +29,18 @@ get "/playlist/:playlist/direction/:direction" do
     erb :"#{403}"
   else
     status 200
-
     playlist, direction = params[:playlist], params[:direction]
-
     if direction == "next"
       track = TRACK_MANAGER.next_track(playlist)
     elsif direction == "prev"
       track = TRACK_MANAGER.prev_track(playlist)
     else
-      track = TRACK_MANAGER.random_track(playlist)
+      track = TRACK_MANAGER.continue(playlist)
     end
-
     content_type TYPER.return_type(track)
-
     headers "Cache-Control" => "no-store, no-cache, must-revalidate, max-age=0",
         "Pragma" => "no-cache",
         "Expires" => "0"
-
     send_file track, filename: "#{File.basename track}", disposition: "inline"
   end
 end

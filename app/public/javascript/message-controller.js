@@ -104,6 +104,6 @@ sendButton.addEventListener('click', async () => {
         await mc.sendMessage();
         await mc.getMessages();
     } catch (error) {
-        console.error('Ошибка при отправке или получении сообщений:', error);
+        console.error('Message handling error:', error);
     }
 });
