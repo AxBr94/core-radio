@@ -1,4 +1,1 @@
-Listen to hardcore and other stuff for free on my site.
-
-Author: Axel Berkovich.
-    
+Listen to hardcore and other stuff for free on my site.    
